@@ -1,0 +1,109 @@
+.contact-main {
+  padding: 60px 8%;
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.contact-left {
+  flex: 1;
+  background: #fafafa;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.1);
+}
+
+.contact-left h1 {
+  margin-bottom: 10px;
+}
+
+.contact-left p {
+  margin: 8px 0;
+}
+
+.contact-form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-form input, 
+.contact-form textarea {
+  padding: 12px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid gray;
+  outline: none;
+}
+
+.contact-form button {
+  background: #222;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.contact-form button:hover {
+  background: #444;
+}
+
+.social-links {
+  margin-top: 20px;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.contact-right {
+  flex: 1;
+}
+
+.review-form-container {
+  padding: 25px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.1);
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-form input,
+.review-form textarea {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid gray;
+}
+
+.review-form button {
+  background: #222;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.review-form button:hover {
+  background: #444;
+}
+
+.map-section {
+  margin-top: 30px;
+  background: #fafafa;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+  .contact-main {
+    flex-direction: column;
+  }
+}
