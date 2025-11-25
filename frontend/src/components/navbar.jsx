@@ -65,6 +65,7 @@ const Navbar = () => {
   </li>
 ) : (
   <>
+  <li className="navbar-item"><Link to="/orders" className="navbar-link">Orders</Link></li>
   <li className="cart-link" onClick={() => setShowCart(true)}><FaShoppingCart/></li>
   <li className="logout-link" onClick={logout}><FaSignOutAlt/></li>
   </>

@@ -11,6 +11,8 @@ const CategoryProducts = lazy(() => import('./components/categories'));
 const Checkout = lazy(() => import('./components/checkout'));
 const About = lazy(() => import('./components/about'));
 const Contact = lazy(() => import('./components/contact'));
+const Orderslist = lazy(() => import("./components/orderslist"))
+const Orderdetails = lazy(()=> import("./components/orderdetails"))
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -22,6 +24,8 @@ function AnimatedRoutes() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/category/:category" element={<ProtectedRoutes><CategoryProducts /></ProtectedRoutes>} />
         <Route path="/checkout" element={<ProtectedRoutes><Checkout /></ProtectedRoutes>} />
+        <Route path="/orders" element={<ProtectedRoutes><Orderslist/></ProtectedRoutes>}/>
+        <Route path="/orders/:id" element={<ProtectedRoutes><Orderdetails/></ProtectedRoutes>}/>
         <Route path="/about" element={<About />} />
       </Routes>
     </AnimatePresence>

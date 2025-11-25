@@ -1,0 +1,33 @@
+.admin-layout {
+  display: flex;
+}
+
+.admin-content {
+  margin-left: 260px;
+  padding: 40px;
+  width: 100%;
+  font-family: Arial;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.stat-card {
+  padding: 30px;
+  border-radius: 12px;
+  color: white;
+  text-align: center;
+  font-size: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.green { background: #22c55e; }
+.blue { background: #3b82f6; }
+.yellow { background: #fde047; color: #333; }
+.orange { background: #f97316; }
+.purple { background: #a855f7; }
+.teal { background: #14b8a6; }
