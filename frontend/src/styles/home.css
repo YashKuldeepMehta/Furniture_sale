@@ -38,6 +38,17 @@
   animation: fadeInUp 1.2s ease-out forwards;
 }
 
+@keyframes fadeInUp {
+  0% {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .hero-title {
   font-size: 3.4rem;
   font-weight: 800;
@@ -92,16 +103,6 @@
   background: #e86c00;
 }
 
-@keyframes fadeInUp {
-  0% {
-    transform: translateY(40px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
 
 
 .categories {

@@ -57,6 +57,11 @@ const Orders = () => {
               <p className="order-date">
                 Ordered on: {new Date(order.createdAt).toLocaleDateString()}
               </p>
+              {order.isDelivered && (
+                <p className="order-date">
+                Delivered on: {new Date(order.deliveredAt).toLocaleDateString()}
+              </p>
+              )}
             </div>
 
             <span className={`order-status ${order.orderStatus}`}>

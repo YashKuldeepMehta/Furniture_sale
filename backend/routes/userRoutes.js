@@ -12,6 +12,7 @@ const Admin = require("../models/admin")
 const auth = require('../middleware/auth')
 const adminAuth = require("../middleware/adminauth")
 const SendOrderConfirmationMail = require("../utils/sendMail")
+const StatusUpdateMail = require("../utils/statusMail")
 
 
 router.get("/", (req, res) => {
@@ -274,21 +275,41 @@ router.put("/admin/order/:id", adminAuth, async (req, res) => {
   if (!status)
     return res.status(400).json({ error: "Status is required" });
 
-  try {
+   try {
     const order = await Order.findById(orderId);
 
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
 
-    order.orderStatus = status;
-    await order.save();
+    const allowedTransitions = {
+      pending: ["confirmed"],
+      confirmed: ["shipped"],
+      shipped: ["delivered"],
+      delivered: []
+    };
 
+    const current = order.orderStatus;
+    const allowedNextStatuses = allowedTransitions[current];
+
+    if (!allowedNextStatuses.includes(status)) {
+      return res.status(400).json({
+        error: `Invalid status transition: '${current}' to '${status}' not allowed`
+      });
+    }
+
+    order.orderStatus = status;
+
+    if(status === "delivered"){
+        order.isDelivered = true
+        order.deliveredAt = new Date()
+    }
+    await order.save();
+    await StatusUpdateMail(order.email, order.name, order._id, order.orderStatus)
     return res.json({ message: "Order status updated successfully" });
 
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
-});
-
+})
 module.exports = router;

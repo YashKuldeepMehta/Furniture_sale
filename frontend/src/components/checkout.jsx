@@ -182,8 +182,8 @@ const Checkout = () => {
                             {formdata.paymentMethod === "card" && (
                                 <>
                                 <input type="text" name="cardName" placeholder='Enter Card Holder Name' onChange={HandleValueChange} required/>
-                                <input type="text" name="cardNumber" placeholder='Enter Card Number' onChange={HandleValueChange} required/>
-                                <input type="password" name="cvv" placeholder='Enter CVV' onChange={HandleValueChange} maxLength={3} required/>
+                                <input type="text" name="cardNumber" placeholder='Enter Card Number' onChange={HandleValueChange} minLength={12} maxLength={12} required/>
+                                <input type="password" name="cvv" placeholder='Enter CVV' onChange={HandleValueChange} minLength={3} maxLength={3} required/>
                                 </>
                             )}
 
