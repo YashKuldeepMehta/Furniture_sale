@@ -9,6 +9,7 @@ import { AuthProvider } from './pages/authcontext';
 const Login = lazy(()=>import("./pages/admin-login"))
 const AdminDashboard = lazy(()=> import("./pages/admin-dashboard"))
 const StatusUpdate = lazy(()=> import("./pages/status_update"))
+const UserStatusUpdate = lazy(() => import("./pages/user-status_update"))
 
 
 function AnimatedRoutes() {
@@ -20,6 +21,7 @@ function AnimatedRoutes() {
         <Route path="/" element={<Login/>} />
         <Route path="/admin-dashboard" element={<ProtectedRoutes><AdminDashboard/></ProtectedRoutes>} />
         <Route path="/status-update" element={<ProtectedRoutes><StatusUpdate/></ProtectedRoutes>} />
+        <Route path="/user-status-update" element={<ProtectedRoutes><UserStatusUpdate/></ProtectedRoutes>} />
       </Routes>
     </AnimatePresence>
   );

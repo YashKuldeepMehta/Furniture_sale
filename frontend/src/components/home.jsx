@@ -35,9 +35,6 @@ const Home = () => {
             Discover comfort, elegance, and craftsmanship — delivered straight to your doorstep.
         </p>
         <div className="hero-buttons">
-            <button className="explore-btn" onClick={() => navigate("/category/sofas")}>
-                Explore Collection
-            </button>
             <button className="shop-btn" onClick={() => navigate("/category/sofas")}>
                 Shop Now
             </button>

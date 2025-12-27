@@ -51,10 +51,16 @@ router.post('/login', async (req, res) => {
         if (!user) {
             return res.status(400).json({ error: "User does not exist" });
         }
+
+        if (user.status === "inactive") {
+            return res.status(403).json({error: "Your account has been deactivated. You can't login."});
+        }
+
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(400).json({ error: "Invalid password" });
         }
+
 
         const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: '1h' });
         res.status(200).json({ message: "Login successful", token });
@@ -234,7 +240,7 @@ router.post("/admin/login", async (req, res) => {
         if (!admin)
             return res.status(500).json({ error: "Invalid credentials" })
 
-        const admintoken = jwt.sign({ id: admin._id, isAdmin:true }, process.env.SECRET_KEY, { expiresIn: '1h' });
+        const admintoken = jwt.sign({ id: admin._id, isAdmin: true }, process.env.SECRET_KEY, { expiresIn: '1h' });
         res.status(200).json({ message: "Login successful", admintoken });
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -242,74 +248,108 @@ router.post("/admin/login", async (req, res) => {
 
 })
 
-router.get("/admin/stats", adminAuth, async(req,res) =>{
-    try{
+router.get("/admin/stats", adminAuth, async (req, res) => {
+    try {
         const totalusers = await User.countDocuments()
         const totalorders = await Order.countDocuments()
 
-        const pending = await Order.countDocuments({orderStatus:"pending"})
-        const confirmed = await Order.countDocuments({orderStatus:"confirmed"})
-        const shipped = await Order.countDocuments({orderStatus:"shipped"})
-        const delivered = await Order.countDocuments({orderStatus:"delivered"})
+        const pending = await Order.countDocuments({ orderStatus: "pending" })
+        const confirmed = await Order.countDocuments({ orderStatus: "confirmed" })
+        const shipped = await Order.countDocuments({ orderStatus: "shipped" })
+        const delivered = await Order.countDocuments({ orderStatus: "delivered" })
 
-        return res.status(200).json({totalusers,totalorders,pending,confirmed,shipped,delivered})
-    }catch(error){
-        return res.status(500).json({error:error.message})
+        return res.status(200).json({ totalusers, totalorders, pending, confirmed, shipped, delivered })
+    } catch (error) {
+        return res.status(500).json({ error: error.message })
     }
 
 })
 
-router.get("/admin/orders",adminAuth, async(req,res)=>{
-    try{
-        const orders = await Order.find().sort({createdAt:-1})
+router.get("/admin/orders", adminAuth, async (req, res) => {
+    try {
+        const orders = await Order.find().sort({ createdAt: -1 })
         return res.status(200).json(orders)
-    }catch(error){
-        return res.status(500).json({error:error.message})
+    } catch (error) {
+        return res.status(500).json({ error: error.message })
     }
 })
 
 router.put("/admin/order/:id", adminAuth, async (req, res) => {
+    const { status } = req.body;
+    const orderId = req.params.id;
+
+    if (!status)
+        return res.status(400).json({ error: "Status is required" });
+
+    try {
+        const order = await Order.findById(orderId);
+
+        if (!order) {
+            return res.status(404).json({ error: "Order not found" });
+        }
+
+        const allowedTransitions = {
+            pending: ["confirmed"],
+            confirmed: ["shipped"],
+            shipped: ["delivered"],
+            delivered: []
+        };
+
+        const current = order.orderStatus;
+        const allowedNextStatuses = allowedTransitions[current];
+
+        if (!allowedNextStatuses.includes(status)) {
+            return res.status(400).json({
+                error: `Invalid status transition: '${current}' to '${status}' not allowed`
+            });
+        }
+
+        order.orderStatus = status;
+
+        if (status === "delivered") {
+            order.isDelivered = true
+            order.deliveredAt = new Date()
+        }
+        await order.save();
+        await StatusUpdateMail(order.email, order.name, order._id, order.orderStatus)
+        return res.json({ message: "Order status updated successfully" });
+
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+})
+
+
+router.get("/admin/users", adminAuth, async (req, res) => {
+    try {
+        const users = await User.find().select("-password")
+        return res.status(200).json(users);
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+})
+
+router.put("/admin/userstatus/:id", adminAuth, async (req, res) => {
   const { status } = req.body;
-  const orderId = req.params.id;
 
-  if (!status)
-    return res.status(400).json({ error: "Status is required" });
+  if (!["active", "inactive"].includes(status)) {
+    return res.status(400).json({ error: "Invalid status value" });
+  }
 
-   try {
-    const order = await Order.findById(orderId);
-
-    if (!order) {
-      return res.status(404).json({ error: "Order not found" });
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
 
-    const allowedTransitions = {
-      pending: ["confirmed"],
-      confirmed: ["shipped"],
-      shipped: ["delivered"],
-      delivered: []
-    };
+    user.status = status;
+    await user.save();
 
-    const current = order.orderStatus;
-    const allowedNextStatuses = allowedTransitions[current];
-
-    if (!allowedNextStatuses.includes(status)) {
-      return res.status(400).json({
-        error: `Invalid status transition: '${current}' to '${status}' not allowed`
-      });
-    }
-
-    order.orderStatus = status;
-
-    if(status === "delivered"){
-        order.isDelivered = true
-        order.deliveredAt = new Date()
-    }
-    await order.save();
-    await StatusUpdateMail(order.email, order.name, order._id, order.orderStatus)
-    return res.json({ message: "Order status updated successfully" });
+    res.json({ message: "User status updated successfully" });
 
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
-})
+});
+
 module.exports = router;

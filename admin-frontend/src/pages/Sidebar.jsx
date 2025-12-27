@@ -21,13 +21,13 @@ const Sidebar = () => {
 
         <li className={location.pathname === "/status-update" ? "active" : ""}>
           <Link to="/status-update">
-            <FaTruck /> Status Update
+            <FaTruck /> Order Status Update
           </Link>
         </li>
 
-        <li className={location.pathname === "/admin-orders" ? "active" : ""}>
-          <Link to="/admin-orders">
-            <FaClipboardList /> All Orders
+        <li className={location.pathname === "/user-status-update" ? "active" : ""}>
+          <Link to="/user-status-update">
+            <FaClipboardList /> User Status Update
           </Link>
         </li>
 

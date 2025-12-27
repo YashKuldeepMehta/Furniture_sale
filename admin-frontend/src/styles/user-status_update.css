@@ -1,0 +1,100 @@
+.admin-layout {
+  display: flex;
+}
+
+.admin-content {
+  margin-left: 260px;
+  padding: 40px;
+  width: 100%;
+  background: #f5f6fa;
+  font-family: Arial, sans-serif;
+}
+
+.admin-content h1 {
+  font-size: 26px;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 25px;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 10px;
+  margin-left: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+
+.users-table thead {
+  background: #111827;
+}
+
+.users-table th {
+  color: white;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+}
+
+
+.users-table td {
+  padding: 14px;
+  text-align: center;
+  font-size: 15px;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+
+.users-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 13px;
+  display: inline-block;
+  color: white;
+}
+
+.badge.active {
+  background: #22c55e;
+}
+
+.badge.inactive {
+  background: #ef4444;
+}
+
+
+.status-dropdown {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  outline: none;
+  font-size: 14px;
+  cursor: pointer;
+  width: 130px;
+}
+
+.status-dropdown:focus {
+  border-color: #4f46e5;
+}
+
+
+.update-btn {
+  padding: 7px 16px;
+  background: #4f46e5;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: b
+}
