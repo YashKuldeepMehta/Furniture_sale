@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/admin-login.css";
 import { toast } from "react-toastify";
@@ -7,7 +7,13 @@ import {useAuth} from "./authcontext"
 
 const AdminLogin = () => {
     const navigate = useNavigate();
-    const {login} = useAuth()
+    const {login,isLoggedIn} = useAuth()
+
+    useEffect(()=>{
+        if(isLoggedIn){
+            navigate("/admin-dashboard");
+        }
+    },[])
 
     const [admin, setAdmin] = useState({
         email: "",
